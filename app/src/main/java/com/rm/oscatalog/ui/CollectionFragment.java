@@ -2,16 +2,16 @@ package com.rm.oscatalog.ui;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.rm.oscatalog.R;
+import com.rm.oscatalog.model.PageData;
 
 import java.util.ArrayList;
 
-public class CollectionFragment<T extends Parcelable> extends BaseFragment {
+public class CollectionFragment<T extends PageData> extends BaseFragment {
 
     private static final String KEY_DATA_SET = "dataSet";
     private ArrayList<T> mDataSet;
@@ -20,7 +20,7 @@ public class CollectionFragment<T extends Parcelable> extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static CollectionFragment newInstance(ArrayList<? extends Parcelable> dataSet) {
+    public static CollectionFragment newInstance(ArrayList<? extends PageData> dataSet) {
         Bundle args = new Bundle();
         args.putParcelableArrayList(KEY_DATA_SET, dataSet);
 
@@ -47,6 +47,5 @@ public class CollectionFragment<T extends Parcelable> extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 }

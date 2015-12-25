@@ -1,9 +1,8 @@
 package com.rm.oscatalog.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Document implements Parcelable {
+public class Document implements PageData {
 
     public final String Extension;
     public final String Name;
@@ -47,5 +46,10 @@ public class Document implements Parcelable {
         dest.writeString(Name);
         dest.writeString(Link);
         dest.writeFloat(Size);
+    }
+
+    @Override
+    public void inflate(String json) {
+
     }
 }

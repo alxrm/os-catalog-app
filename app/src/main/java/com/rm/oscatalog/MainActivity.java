@@ -6,27 +6,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.rm.oscatalog.model.Page;
+import com.rm.oscatalog.model.PageData;
 import com.rm.oscatalog.ui.CollectionFragment;
 import com.rm.oscatalog.ui.adapter.CatalogPagerAdapter;
+import com.rm.oscatalog.utils.Pages;
+
+import java.util.ArrayList;
+
+import static com.rm.oscatalog.utils.AssetsUtil.getPageDataByKey;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TITLE_LECTURES = "Лекции";
-    private static final String TITLE_LABS = "Лабораторные работы";
-    private static final String TITLE_BOOKS = "Книги";
-    private static final String TITLE_MOVIES = "Видео";
-
-    private static final String[] TITLES = {
-            TITLE_LECTURES, TITLE_LABS,
-            TITLE_BOOKS, TITLE_MOVIES
-    };
-
-    private static final int[] TAB_ICONS = {
-            R.drawable.lectures,
-            R.drawable.labs,
-            R.drawable.books,
-            R.drawable.movies
-    };
+    private ArrayList<Page<? extends PageData>> mPages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +27,32 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(TITLE_LECTURES);
+        setTitle(Pages.TITLE_LECTURES);
+        setupPages();
 
         ViewPager sectionPager = (ViewPager) findViewById(R.id.container);
         TabLayout sectionTabs = (TabLayout) findViewById(R.id.tab_layout);
 
         CatalogPagerAdapter pagerAdapter = new CatalogPagerAdapter(getFragmentManager());
-        pagerAdapter.addPage(new CollectionFragment());
-        pagerAdapter.addPage(new CollectionFragment());
-        pagerAdapter.addPage(new CollectionFragment());
-        pagerAdapter.addPage(new CollectionFragment());
+        fillPagerAdapter(pagerAdapter);
 
         sectionPager.setAdapter(pagerAdapter);
         sectionPager.addOnPageChangeListener(getTitleChangeListener());
 
         sectionTabs.setupWithViewPager(sectionPager);
-        addTabIcons(sectionTabs);
+        fillTabIcons(sectionTabs);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private void addTabIcons(TabLayout tabs) {
+    private void fillPagerAdapter(CatalogPagerAdapter pagerAdapter) {
+        for (Page<? extends PageData> page : mPages)
+            pagerAdapter.addPage(CollectionFragment.newInstance(page.Data));
+    }
+
+    private void fillTabIcons(TabLayout tabs) {
+        TabLayout.Tab tab;
         for (int i = 0; i < tabs.getTabCount(); i++) {
-            tabs.getTabAt(i).setIcon(TAB_ICONS[i]);
+            tab = tabs.getTabAt(i);
+            if (tab != null) tab.setIcon(mPages.get(i).Icon);
         }
     }
 
@@ -65,8 +61,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                setTitle(TITLES[position]);
+                setTitle(mPages.get(position).Title);
             }
         };
+    }
+
+    private void setupPages() {
+        mPages.add(Page.create(R.drawable.lectures, Pages.TITLE_LECTURES,
+                getPageDataByKey(this, Pages.LECTURES)));
+
+        mPages.add(Page.create(R.drawable.labs, Pages.TITLE_LABS,
+                getPageDataByKey(this, Pages.LABS)));
+
+        mPages.add(Page.create(R.drawable.books, Pages.TITLE_BOOKS,
+                getPageDataByKey(this, Pages.BOOKS)));
+
+        mPages.add(Page.create(R.drawable.movies, Pages.TITLE_MOVIES,
+                getPageDataByKey(this, Pages.MOVIES)));
     }
 }

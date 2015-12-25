@@ -1,9 +1,8 @@
 package com.rm.oscatalog.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Video implements Parcelable {
+public class Video implements PageData {
 
     public final String Name;
     public final String DownloadLink;
@@ -51,5 +50,10 @@ public class Video implements Parcelable {
         dest.writeString(YouTubeLink);
         dest.writeFloat(Size);
         dest.writeInt(Duration);
+    }
+
+    @Override
+    public void inflate(String json) {
+
     }
 }
