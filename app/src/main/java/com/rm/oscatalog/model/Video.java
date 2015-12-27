@@ -4,26 +4,34 @@ import android.os.Parcel;
 
 public class Video implements PageData {
 
-    public final String Name;
-    public final String DownloadLink;
-    public final String YouTubeLink;
-    public final float Size;
-    public final int Duration;
+    public final String readableName;
+    public final String realName;
+    public final String downloadLink;
+    public final String youtubeLink;
+    public final int size;
+    public final int duration;
 
-    public Video(String name, String downloadLink, String youTubeLink, float size, int duration) {
-        this.Name = name;
-        this.Size = size;
-        this.DownloadLink = downloadLink;
-        this.YouTubeLink = youTubeLink;
-        this.Duration = duration;
+    public Video(String readableName,
+                 String realName,
+                 String downloadLink,
+                 String youTubeLink,
+                 int size,
+                 int duration) {
+        this.readableName = readableName;
+        this.realName = realName;
+        this.size = size;
+        this.downloadLink = downloadLink;
+        this.youtubeLink = youTubeLink;
+        this.duration = duration;
     }
 
     protected Video(Parcel in) {
-        this.Name = in.readString();
-        this.DownloadLink = in.readString();
-        this.YouTubeLink = in.readString();
-        this.Size = in.readFloat();
-        this.Duration = in.readInt();
+        readableName = in.readString();
+        realName = in.readString();
+        downloadLink = in.readString();
+        youtubeLink = in.readString();
+        size = in.readInt();
+        duration = in.readInt();
     }
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
@@ -45,15 +53,11 @@ public class Video implements PageData {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Name);
-        dest.writeString(DownloadLink);
-        dest.writeString(YouTubeLink);
-        dest.writeFloat(Size);
-        dest.writeInt(Duration);
-    }
-
-    @Override
-    public void inflate(String json) {
-
+        dest.writeString(readableName);
+        dest.writeString(realName);
+        dest.writeString(downloadLink);
+        dest.writeString(youtubeLink);
+        dest.writeInt(size);
+        dest.writeInt(duration);
     }
 }

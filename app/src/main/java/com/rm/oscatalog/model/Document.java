@@ -1,26 +1,30 @@
 package com.rm.oscatalog.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Document implements PageData {
+public class Document implements Parcelable {
 
-    public final String Extension;
-    public final String Name;
-    public final String Link;
-    public final float Size;
+    public final String ext;
+    public final String readableName;
+    public final String realName;
+    public final String link;
+    public final long size;
 
-    public Document(String extension, String name, String link, float size) {
-        this.Extension = extension;
-        this.Name = name;
-        this.Link = link;
-        this.Size = size;
+    public Document(String extension, String name, String realName, String link, long size) {
+        this.ext = extension;
+        this.readableName = name;
+        this.realName = realName;
+        this.link = link;
+        this.size = size;
     }
 
     protected Document(Parcel in) {
-        this.Extension = in.readString();
-        this.Name = in.readString();
-        this.Link = in.readString();
-        this.Size = in.readFloat();
+        ext = in.readString();
+        readableName = in.readString();
+        realName = in.readString();
+        link = in.readString();
+        size = in.readLong();
     }
 
     public static final Creator<Document> CREATOR = new Creator<Document>() {
@@ -42,14 +46,10 @@ public class Document implements PageData {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Extension);
-        dest.writeString(Name);
-        dest.writeString(Link);
-        dest.writeFloat(Size);
-    }
-
-    @Override
-    public void inflate(String json) {
-
+        dest.writeString(ext);
+        dest.writeString(readableName);
+        dest.writeString(realName);
+        dest.writeString(link);
+        dest.writeLong(size);
     }
 }
