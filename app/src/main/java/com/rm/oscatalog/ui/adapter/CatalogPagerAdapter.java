@@ -4,20 +4,20 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 
-import com.rm.oscatalog.ui.CollectionFragment;
+import com.rm.oscatalog.ui.PageContentFragment;
 
 import java.util.ArrayList;
 
 public class CatalogPagerAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<CollectionFragment> mFragments;
+    private ArrayList<PageContentFragment> mFragments;
 
     public CatalogPagerAdapter(FragmentManager fm) {
         super(fm);
         mFragments = new ArrayList<>();
     }
 
-    public void addPage(CollectionFragment fragment) {
+    public void addPage(PageContentFragment fragment) {
         mFragments.add(fragment);
         notifyDataSetChanged();
     }

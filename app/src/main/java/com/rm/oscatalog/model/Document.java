@@ -1,28 +1,24 @@
 package com.rm.oscatalog.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Document implements Parcelable {
+public class Document implements PageData {
 
     public final String ext;
-    public final String readableName;
-    public final String realName;
+    public final String name;
     public final String link;
     public final long size;
 
-    public Document(String extension, String name, String realName, String link, long size) {
+    public Document(String extension, String name, String link, long size) {
         this.ext = extension;
-        this.readableName = name;
-        this.realName = realName;
+        this.name = name;
         this.link = link;
         this.size = size;
     }
 
     protected Document(Parcel in) {
         ext = in.readString();
-        readableName = in.readString();
-        realName = in.readString();
+        name = in.readString();
         link = in.readString();
         size = in.readLong();
     }
@@ -47,8 +43,7 @@ public class Document implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(ext);
-        dest.writeString(readableName);
-        dest.writeString(realName);
+        dest.writeString(name);
         dest.writeString(link);
         dest.writeLong(size);
     }
