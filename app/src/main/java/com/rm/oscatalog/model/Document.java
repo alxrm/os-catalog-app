@@ -9,13 +9,6 @@ public class Document implements PageData {
     public final String link;
     public final long size;
 
-    public Document(String extension, String name, String link, long size) {
-        this.ext = extension;
-        this.name = name;
-        this.link = link;
-        this.size = size;
-    }
-
     protected Document(Parcel in) {
         ext = in.readString();
         name = in.readString();

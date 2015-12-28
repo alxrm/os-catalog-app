@@ -4,21 +4,17 @@ import android.os.Parcel;
 
 public class Video implements PageData {
 
-    public static final String EXTRA = "YouTube";
+    public static final String EXTRA = "Вконтакте";
 
     public final String name;
-    public final String youtubeLink;
+    public final String link;
+    public final String preview;
     public final int duration;
-
-    public Video(String name, String youTubeLink, int duration) {
-        this.name = name;
-        this.youtubeLink = youTubeLink;
-        this.duration = duration;
-    }
 
     protected Video(Parcel in) {
         name = in.readString();
-        youtubeLink = in.readString();
+        link = in.readString();
+        preview = in.readString();
         duration = in.readInt();
     }
 
@@ -42,7 +38,8 @@ public class Video implements PageData {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(youtubeLink);
+        dest.writeString(link);
+        dest.writeString(preview);
         dest.writeInt(duration);
     }
 }

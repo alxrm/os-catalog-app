@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0000000"
+    android:visibility="gone"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/onboarding_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_info"/>
+
+        <TextView
+            android:id="@+id/onboarding_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#FEFEFF"
+            android:gravity="center"
+            android:layout_below="@id/onboarding_icon"
+            android:textSize="20sp"
+            android:text="Что это?"/>
+
+        <TextView
+            android:id="@+id/onboarding_descr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="18dp"
+            android:textColor="#A3A4A5"
+            android:gravity="center"
+            android:layout_below="@id/onboarding_title"
+            android:textSize="18sp"
+            android:text="Данное приложение представляет собой каталог материалов по предмету\n ОC и среды.\n\nВыберите нужный вам материал и автоматически начнётся скачивание."/>
+
+        <Button
+            android:id="@+id/onboarding_proceed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/onboarding_descr"
+            android:padding="8dp"
+            android:layout_marginTop="22dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textColor="?attr/colorAccent"
+            android:textAllCaps="true"
+            android:text="Приступить"
+            />
+
+    </RelativeLayout>
+</RelativeLayout>

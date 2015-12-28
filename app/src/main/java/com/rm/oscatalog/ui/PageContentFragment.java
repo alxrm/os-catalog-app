@@ -1,5 +1,7 @@
 package com.rm.oscatalog.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rm.oscatalog.R;
+import com.rm.oscatalog.model.Document;
 import com.rm.oscatalog.model.PageData;
+import com.rm.oscatalog.model.Video;
+import com.rm.oscatalog.ui.adapter.OnItemClickListener;
 import com.rm.oscatalog.ui.adapter.SingleTypeAdapter;
 import com.rm.oscatalog.utils.Pages;
 
@@ -72,6 +77,22 @@ public class PageContentFragment extends BaseFragment {
                     R.layout.item_page_content
             );
 
+        mSingleTypeAdapter.setOnItemClickListener(getItemClickListener());
         content.setAdapter(mSingleTypeAdapter);
+    }
+
+    private OnItemClickListener getItemClickListener() {
+        return new OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+
+                PageData item = mPageContent.get(position);
+                String link = mContentType.isAssignableFrom(Video.class) ?
+                        ((Video) item).link : ((Document) item).link;
+
+                Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                startActivity(viewIntent);
+            }
+        };
     }
 }

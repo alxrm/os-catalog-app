@@ -1,33 +1,42 @@
 package com.rm.oscatalog;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import com.rm.oscatalog.model.Page;
 import com.rm.oscatalog.ui.PageContentFragment;
 import com.rm.oscatalog.ui.adapter.CatalogPagerAdapter;
 import com.rm.oscatalog.utils.AssetsUtil;
 import com.rm.oscatalog.utils.Pages;
+import com.rm.oscatalog.utils.Prefs;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Page> mPages = new ArrayList<>();
+    private View mOnBoarding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AssetsUtil.init(this);
+        Prefs.init(this);
+
+        showOnBoardingIfNeeded();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(Pages.TITLE_LECTURES);
-
-        AssetsUtil.init(this);
         setupPages();
 
         ViewPager sectionPager = (ViewPager) findViewById(R.id.container);
@@ -42,6 +51,29 @@ public class MainActivity extends AppCompatActivity {
 
         sectionTabs.setupWithViewPager(sectionPager);
         fillTabIcons(sectionTabs);
+    }
+
+    private void showOnBoardingIfNeeded() {
+        if (!Prefs.get().getBoolean(Prefs.KEY_IS_HINT_SHOWN, false)) {
+
+            Button proceed = (Button) findViewById(R.id.onboarding_proceed);
+            mOnBoarding = findViewById(R.id.onboarding);
+            mOnBoarding.setVisibility(View.VISIBLE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(Color.BLACK);
+            }
+
+            proceed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnBoarding.setVisibility(View.GONE);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        getWindow().setStatusBarColor(Color.parseColor("#004D40"));
+                }
+            });
+        }
     }
 
     private void fillPagerAdapter(CatalogPagerAdapter pagerAdapter) {

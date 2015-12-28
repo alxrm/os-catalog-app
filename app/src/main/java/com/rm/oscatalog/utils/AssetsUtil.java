@@ -2,6 +2,7 @@ package com.rm.oscatalog.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,17 @@ public final class AssetsUtil {
 
     public static void init(Context context) {
         sAssets = context.getAssets();
+    }
+
+    public static Drawable loadImageFromFile(String imageName) {
+        try {
+            InputStream ims = sAssets.open(imageName);
+            return Drawable.createFromStream(ims, null);
+        }
+        catch(IOException ex) {
+            ex.printStackTrace();
+            throw new IllegalArgumentException("Could not find image file");
+        }
     }
 
     public static String readPageFromFile(String key) throws IOException {
