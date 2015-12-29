@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     mOnBoarding.setVisibility(View.GONE);
+                    Prefs.put(Prefs.KEY_IS_HINT_SHOWN, true);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                         getWindow().setStatusBarColor(Color.parseColor("#004D40"));
