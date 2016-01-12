@@ -2,18 +2,33 @@ package com.rm.oscatalog.model;
 
 import android.os.Parcel;
 
-public class Document implements PageData {
+public class Document extends Content {
 
-    public final String ext;
-    public final String name;
-    public final String link;
-    public final long size;
+    private final String ext;
+    private final long size;
 
-    protected Document(Parcel in) {
-        ext = in.readString();
-        name = in.readString();
-        link = in.readString();
-        size = in.readLong();
+    public Document(Parcel in) {
+        super(in);
+        this.ext = in.readString();
+        this.size = in.readLong();
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getLink() {
+        return this.link;
+    }
+
+    public String getExt() {
+        return this.ext;
+    }
+
+    public long getSize() {
+        return this.size;
     }
 
     public static final Creator<Document> CREATOR = new Creator<Document>() {
@@ -35,9 +50,9 @@ public class Document implements PageData {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(TYPE_DOC);
+        super.writeToParcel(dest, flags);
         dest.writeString(ext);
-        dest.writeString(name);
-        dest.writeString(link);
         dest.writeLong(size);
     }
 }

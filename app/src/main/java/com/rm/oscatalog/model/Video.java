@@ -2,20 +2,35 @@ package com.rm.oscatalog.model;
 
 import android.os.Parcel;
 
-public class Video implements PageData {
+public class Video extends Content {
 
     public static final String EXTRA = "Вконтакте";
 
-    public final String name;
-    public final String link;
-    public final String preview;
-    public final int duration;
+    private final String preview;
+    private final int duration;
 
-    protected Video(Parcel in) {
-        name = in.readString();
-        link = in.readString();
+    public Video(Parcel in) {
+        super(in);
         preview = in.readString();
         duration = in.readInt();
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getLink() {
+        return this.link;
+    }
+
+    public String getPreview() {
+        return this.preview;
+    }
+
+    public int getDuration() {
+        return this.duration;
     }
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
@@ -37,8 +52,8 @@ public class Video implements PageData {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(link);
+        dest.writeString(TYPE_VIDEO);
+        super.writeToParcel(dest, flags);
         dest.writeString(preview);
         dest.writeInt(duration);
     }

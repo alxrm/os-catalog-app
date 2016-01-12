@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(Pages.TITLE_LECTURES);
-        setupPages();
+
+        mPages = Pages.get();
+        setTitle(mPages.get(0).title);
 
         ViewPager sectionPager = (ViewPager) findViewById(R.id.container);
         TabLayout sectionTabs = (TabLayout) findViewById(R.id.tab_layout);
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillPagerAdapter(CatalogPagerAdapter pagerAdapter) {
         for (Page page : mPages)
-            pagerAdapter.addPage(PageContentFragment.newInstance(page.data, page.key));
+            pagerAdapter.addPage(PageContentFragment.newInstance(page.data, page.contentType));
     }
 
     private void fillTabIcons(TabLayout tabs) {
@@ -98,12 +99,5 @@ public class MainActivity extends AppCompatActivity {
                 setTitle(mPages.get(position).title);
             }
         };
-    }
-
-    private void setupPages() {
-        mPages.add(Page.create(Pages.LECTURES));
-        mPages.add(Page.create(Pages.LABS));
-        mPages.add(Page.create(Pages.BOOKS));
-        mPages.add(Page.create(Pages.MOVIES));
     }
 }

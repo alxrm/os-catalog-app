@@ -1,24 +1,18 @@
 package com.rm.oscatalog.model;
 
-import com.rm.oscatalog.utils.Pages;
-
 import java.util.ArrayList;
 
 public class Page {
 
     public final int icon;
     public final String title;
-    public final ArrayList<PageData> data;
-    public final String key;
+    public final ArrayList<Content> data;
+    public final String contentType;
 
-    public static Page create(String pageKey) {
-        return new Page(pageKey);
-    }
-
-    private Page(String key) {
-        this.key = key;
-        this.icon = Pages.getPageIcon(key);
-        this.title = Pages.getPageTitle(key);
-        this.data = Pages.getPageData(key);
+    public Page(int icon, String title, ArrayList<Content> data, String contentType) {
+        this.icon = icon;
+        this.title = title;
+        this.data = data;
+        this.contentType = contentType;
     }
 }

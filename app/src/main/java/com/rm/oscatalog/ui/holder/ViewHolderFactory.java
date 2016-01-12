@@ -2,14 +2,15 @@ package com.rm.oscatalog.ui.holder;
 
 import android.view.View;
 
-import com.rm.oscatalog.model.Document;
-import com.rm.oscatalog.model.Video;
+import com.rm.oscatalog.model.Content;
 
 public final class ViewHolderFactory {
 
-    public static BaseViewHolder build(Class<?> modelType, View itemView) {
-        if (modelType.isAssignableFrom(Document.class)) return new DocumentViewHolder(itemView);
-        if (modelType.isAssignableFrom(Video.class)) return new VideoViewHolder(itemView);
-        throw new IllegalArgumentException("Unregistered view holder type");
+    public static BaseViewHolder build(String typeCode, View itemView) {
+        switch (typeCode) {
+            case Content.TYPE_VIDEO: return new VideoViewHolder(itemView);
+            case Content.TYPE_DOC: return new DocumentViewHolder(itemView);
+            default: throw new IllegalArgumentException("Cannot find content contentType");
+        }
     }
 }

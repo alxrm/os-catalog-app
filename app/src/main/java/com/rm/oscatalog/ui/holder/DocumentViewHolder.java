@@ -28,9 +28,10 @@ public class DocumentViewHolder extends BaseViewHolder {
     public <T> void bind(T model) {
         Document document = (Document) model;
 
-        mName.setText(document.name);
-        mSize.setText(FormatUtil.formatBytes(document.size));
+        mName.setText(document.getName());
+        mSize.setText(FormatUtil.formatBytes(document.getSize()));
+
         mExt.setVisibility(View.VISIBLE);
-        mExt.setText(document.ext);
+        mExt.setText(document.getExt());
     }
 }

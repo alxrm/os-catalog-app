@@ -10,16 +10,17 @@ import com.rm.oscatalog.ui.holder.ViewHolderFactory;
 
 import java.util.ArrayList;
 
-public class SingleTypeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class ContentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private OnItemClickListener mListener;
-    private ArrayList<?> mContent;
-    private final Class<?> mContentDataType;
+    private final ArrayList<?> mDataSet;
+    private final String mContentDataType;
     private final int mItemLayoutId;
 
-    public SingleTypeAdapter(ArrayList<?> content, Class<?> contentDataType, int id) {
+    private OnItemClickListener mListener;
+
+    public ContentAdapter(ArrayList<?> dataSet, String contentDataType, int id) {
         this.mItemLayoutId = id;
-        this.mContent = content;
+        this.mDataSet = dataSet;
         this.mContentDataType = contentDataType;
     }
 
@@ -32,20 +33,19 @@ public class SingleTypeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         BaseViewHolder holder = ViewHolderFactory.build(mContentDataType, itemView);
 
-        if (mListener != null)
-            holder.setOnItemClickListener(mListener);
+        if (mListener != null) holder.setOnItemClickListener(mListener);
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        holder.bind(mContent.get(position));
+        holder.bind(mDataSet.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mContent.size();
+        return mDataSet.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

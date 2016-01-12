@@ -33,11 +33,12 @@ public class VideoViewHolder extends BaseViewHolder {
         Video video = (Video) model;
 
         mPreview.setImageBitmap(null);
-        mPreview.setImageDrawable(AssetsUtil.loadImageFromFile(video.preview));
+        mPreview.setImageDrawable(AssetsUtil.loadImageFromFile(video.getPreview()));
 
-        mName.setText(video.name);
+        mName.setText(video.getName());
         mExtra.setText(Video.EXTRA);
+
         mDuration.setVisibility(View.VISIBLE);
-        mDuration.setText(FormatUtil.formatSeconds(video.duration));
+        mDuration.setText(FormatUtil.formatSeconds(video.getDuration()));
     }
 }
