@@ -1,9 +1,13 @@
 package com.rm.oscatalog.utils;
 
+// утил класс для форматирования данных в читабельный формат
 public class FormatUtil {
 
+    // константа с префиксами (Kilo, Mega, Giga, Tera)
     private static final String BYTE_PREFIXES = "KMGTPE";
 
+    // форматирование времени в читабельный формат из количества секунд
+    // используется в списке видео
     public static String formatSeconds(int seconds) {
         return String.format("%02d:%02d", seconds / 60, seconds % 60);
     }
