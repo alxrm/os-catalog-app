@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.rm.oscatalog.R;
 import com.rm.oscatalog.model.Video;
-import com.rm.oscatalog.utils.AssetsUtil;
+import com.rm.oscatalog.utils.FileUtils;
 import com.rm.oscatalog.utils.FormatUtil;
 
 public class VideoViewHolder extends BaseViewHolder {
@@ -37,13 +37,15 @@ public class VideoViewHolder extends BaseViewHolder {
 
         // загрузка изображения обложки
         mPreview.setImageBitmap(null);
-        mPreview.setImageDrawable(AssetsUtil.loadImageFromFile(video.getPreview()));
+        mPreview.setImageDrawable(FileUtils.loadImageFromFile(video.getPreview()));
 
         mName.setText(video.getName()); // привязка имени
         mSource.setText(Video.SOURCE); // привязка источника
 
         // делаем видимой строку с длительностью(мы её прячем, если элемент это документ)
         mDuration.setVisibility(View.VISIBLE);
-        mDuration.setText(FormatUtil.formatSeconds(video.getDuration())); // привязка длительности
+
+        // привязка длительности
+        mDuration.setText(FormatUtil.formatSeconds(video.getDuration()));
     }
 }

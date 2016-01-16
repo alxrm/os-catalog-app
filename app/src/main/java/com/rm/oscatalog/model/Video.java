@@ -7,7 +7,7 @@ import android.os.Parcel;
 public class Video extends Content {
 
     // константа с дополнительной информацией о видео (источник)
-    public static final String SOURCE = "Вконтакте";
+    public static final String SOURCE = "YouTube";
 
     private final String preview; // обложка видео (название файла с изображением)
     private final int duration; // длительность (в секундах)

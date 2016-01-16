@@ -76,4 +76,10 @@ public class Document extends Content {
         dest.writeString(ext); // запись расширения
         dest.writeLong(size); // запись размера
     }
+
+    /* преобразует объект документа в строку, содержащую имя файла и расширение */
+    @Override // пометка, что метод отнаследован
+    public String toString() {
+        return name + '.' + ext;
+    }
 }

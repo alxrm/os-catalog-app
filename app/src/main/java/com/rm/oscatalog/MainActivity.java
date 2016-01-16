@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.rm.oscatalog.model.Page;
 import com.rm.oscatalog.ui.PageContentFragment;
 import com.rm.oscatalog.ui.adapter.CatalogPagerAdapter;
-import com.rm.oscatalog.utils.AssetsUtil;
+import com.rm.oscatalog.utils.FileUtils;
 import com.rm.oscatalog.utils.Pages;
 import com.rm.oscatalog.utils.Prefs;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // задание представления окна
 
         // инициализация утил классов
-        AssetsUtil.init(this);
+        FileUtils.init(this);
         Prefs.init(this);
 
         // показать подсказку, если ещё не показывали

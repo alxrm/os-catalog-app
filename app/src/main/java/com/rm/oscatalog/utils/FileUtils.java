@@ -1,25 +1,33 @@
 package com.rm.oscatalog.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
+
+import com.rm.oscatalog.model.Document;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-// утил класс для работы с файлами из памяти приложения
-public final class AssetsUtil {
+// утил класс для работы с файлами
+public final class FileUtils {
 
     private static final String FILE_EXT = ".json"; // константа с расширением файлов
 
     // класс, дающий доступ к некомпилируемым файлам,
     // хранящимся в памяти приложения
     private static AssetManager sAssets;
+    private static Context sContext;
 
     // инициализация
     public static void init(Context context) {
+        sContext = context;
         sAssets = context.getAssets(); // получение доступа
     }
 
@@ -55,5 +63,24 @@ public final class AssetsUtil {
         while ((line = reader.readLine()) != null) jsonStringBuilder.append(line);
 
         return jsonStringBuilder.toString();
+    }
+
+    public static String getMimeType(Uri uri) {
+        String mimeType;
+
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = sContext.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase()
+            );
+        }
+        return mimeType;
+    }
+
+    public static File getFileForDocument(Document item) {
+        return new File(sContext.getExternalCacheDir(), item.toString());
     }
 }

@@ -1,8 +1,11 @@
 package com.rm.oscatalog.ui;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +16,17 @@ import android.view.ViewGroup;
 
 import com.rm.oscatalog.R;
 import com.rm.oscatalog.model.Content;
+import com.rm.oscatalog.model.Document;
+import com.rm.oscatalog.model.Video;
 import com.rm.oscatalog.ui.adapter.ContentAdapter;
 import com.rm.oscatalog.ui.adapter.OnItemClickListener;
+import com.rm.oscatalog.utils.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
-import static com.rm.oscatalog.model.Content.TYPE_DOC;
-import static com.rm.oscatalog.model.Content.TYPE_VIDEO;
+import static android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED;
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 /* представление страницы - фрагмент */
 public class PageContentFragment extends BaseFragment {
@@ -28,15 +35,70 @@ public class PageContentFragment extends BaseFragment {
     private static final String KEY_DATA_SET = "dataSet";
     private static final String KEY_CONTENT_TYPE = "contentType";
 
-    // константы с названиями пакетов приложений
-    private static final String PACKAGE_VK = "com.vkontakte.android";
-    private static final String PACKAGE_GOOGLE_CHROME = "com.android.chrome";
-
     private ArrayList<Content> mPageContent; // массив данных, которые должны быть отрисованы на странице
     private ContentAdapter mContentAdapter; // класс, осуществляющий привязку данных к представлению
     private String mContentType; // тип данных, отображаемых на этой странице
 
-    // по правилам у фрагмента должен быть пустой конструктор
+    private DownloadManager mDownloadManager; // сервис для скачивания файлов через сеть
+    private long mCurrentDownloadId; // число с идентификационным номером текущего скачивания
+
+    // фильтр намерений для приёмника сигналов,
+    // вызываемых при скачивании файлов с помощью сервиса (DownloadManager)
+    // он нужен для того, чтобы фильтровать сигналы и получать только нужные нам
+    private IntentFilter mDownloaderFilter;
+
+    private BroadcastReceiver mDownloadReceiver = new BroadcastReceiver() {
+
+        // метод, который вызывается при сигналах, которые должен получать приёмник
+        @Override // пометка, что метод отнаследован
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction(); // получаем тип сигнала
+
+            // проверка, соответствует ли тип сигнала тому, который нам нужен (окончание загрузки)
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+
+                // получаем ID загрузки
+                long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+
+                // если мы получили сигнал не о последней загрузке, то ничего не делаем
+                if (downloadId != mCurrentDownloadId) return;
+
+                // создаём запрос в базу данных Загрузчика
+                DownloadManager.Query query = new DownloadManager.Query();
+
+                // задаём в запросе по какому ID загрузки искать
+                query.setFilterById(downloadId);
+
+                // получаем виртуальную таблицу с результатом
+                Cursor c = mDownloadManager.query(query);
+
+                // проверка, на то, что результат не пустой
+                if (c.moveToFirst()) {
+
+                    // получаем статус загрузки по ID
+                    int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+
+                    // проверка на то, что статус загрузки – успешно завершена
+                    if (DownloadManager.STATUS_SUCCESSFUL == status) {
+
+                        // получаем путь, куда сохранился наш файл
+                        String uriString =
+                                c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+
+                        // открываем по этому пути файл
+                        showContent(Uri.parse(uriString), false);
+                    }
+
+                    // закрываем виртуальную таблицу с результатом
+                    c.close();
+                }
+
+            }
+        }
+    };
+
+    // по правилам у фрагмента должен быть пустой конструктор с модификатором public,
+    // потому что внутренние механизмы обращаются к фрагменту именно по нему
     public PageContentFragment() {
         // Required empty public constructor
     }
@@ -58,6 +120,13 @@ public class PageContentFragment extends BaseFragment {
     @Override // пометка, что метод отнаследован
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // инициализация фильтра намерений с передачей константы
+        // с названием сигнала, по которому он будет фильтровать
+        mDownloaderFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+
+        // инициализация сервиса для скачивания файлов
+        mDownloadManager = (DownloadManager) getActivity().getSystemService(DOWNLOAD_SERVICE);
 
         // распаковка параметров
         mPageContent = getArguments().getParcelableArrayList(KEY_DATA_SET); // массив
@@ -92,6 +161,28 @@ public class PageContentFragment extends BaseFragment {
         content.setAdapter(mContentAdapter);
     }
 
+    @Override // пометка, что метод отнаследован
+    public void onStart() {
+        super.onStart();
+
+        // если приложение начинает работу, включаем приёмник сигналов,
+        // чтобы после скачивания автоматически открывался нужный файл
+        if (getActivity() != null) {
+            getActivity().registerReceiver(mDownloadReceiver, mDownloaderFilter);
+        }
+    }
+
+    @Override // пометка, что метод отнаследован
+    public void onStop() {
+        super.onStop();
+
+        // если приложение останавливается, отключаем приёмник сигналов,
+        // чтобы после закрытия приложения не открылся скачанный файл
+        if (getActivity() != null) {
+            getActivity().unregisterReceiver(mDownloadReceiver);
+        }
+    }
+
     /* метод получения слушателя нажатия */
     private OnItemClickListener getItemClickListener() {
         return new OnItemClickListener() {
@@ -103,58 +194,68 @@ public class PageContentFragment extends BaseFragment {
                 // получения данных из массива
                 Content item = mPageContent.get(position);
 
-                // получение доступа к информации об установленных приложениях
-                PackageManager manager = getActivity().getPackageManager();
+                // проверка типа, если это видео, запускаем его проигрываться
+                if (item instanceof Video) {
+                    showContent(Uri.parse(item.getLink()), true);
+                }
 
-                // получения нужного намерения для открытия ссылки по типу данных
-                Intent viewIntent = getIntentForType(manager, mContentType);
+                // если документ, получаем файл
+                if (item instanceof Document) {
 
-                // задаём в качестве данных интенту ссылку
-                viewIntent.setData(Uri.parse(item.getLink()));
+                    // приводим тип, чтобы избежать лишней нагрузки (распаковка может быть дорогой)
+                    Document doc = (Document) item;
 
-                // выставляем флаг открытия нужного приложения в новом окне
-                viewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // создаём объект файла документа
+                    File documentFile = FileUtils.getFileForDocument(doc);
 
-                // запуск намерения
-                if (viewIntent.resolveActivity(manager) != null)
-                    startActivity(viewIntent);
+                    // если файл документа уже скачан – просто открываем
+                    // если не скачан, скачиваем
+                    if (documentFile.exists()) showContent(Uri.fromFile(documentFile), false);
+                    else downloadFile(doc.getLink(), documentFile);
+                }
             }
         };
     }
 
-    /* метод получения намерения по ключу типа данных (одна из констант) */
-    private Intent getIntentForType(PackageManager manager, String type) {
+    // метод для открытия контента, принимающий URI с данными,
+    // которые нужно показать и условие, является ли этот URI ссылкой
+    private void showContent(Uri data, boolean isLink) {
+        Intent viewer = new Intent(Intent.ACTION_VIEW); // создаём намерение
 
-        // проверка наличия браузера
-        boolean hasChrome = isInstalledPackage(manager, PACKAGE_GOOGLE_CHROME);
-
-        // проверка наличия клиента VK
-        boolean hasVk = isInstalledPackage(manager, PACKAGE_VK);
-
-        // инициализация намерения
-        Intent viewIntent = new Intent(Intent.ACTION_VIEW);
-
-        // настройка фрагмента для открытия документа
-        if (type.equals(TYPE_DOC) && hasChrome)
-            viewIntent.setPackage(PACKAGE_GOOGLE_CHROME);
-
-        // настройка фрагмента для открытия видео
-        if (type.equals(TYPE_VIDEO)) {
-            if (hasVk) viewIntent.setPackage(PACKAGE_VK);
-            else if (hasChrome) viewIntent.setPackage(PACKAGE_GOOGLE_CHROME);
+        // если URI не является ссылкой, указываем MIME тип,
+        // чтобы система знала через какое приложение открывать файл
+        if (!isLink) {
+            viewer.setDataAndType(data, FileUtils.getMimeType(data)); // ставим путь и тип
+        } else {
+            viewer.setData(data); // ставим только путь(ссылку)
         }
 
-        return viewIntent;
+        if (viewer.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(viewer); // запускаем намерение
+        }
     }
 
-    // метод, осуществляющий проверку, установлено ли приложение,
-    // которое должно обработать намерение
-    private boolean isInstalledPackage(PackageManager manager, String packageName) {
-        try {
-            PackageInfo info = manager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            return info != null; // если ошибки нет и данные о приложении не пустые, ответ положителен
-        } catch (PackageManager.NameNotFoundException e) {
-            return false; // в случае ошибки при поиске имени возвращается негативный ответ
-        }
+    // метод для запуска скачивания документа, принимает в себя
+    // ссылку на скачивание и объект файла,
+    // в который будет записан результат скачивания
+    private void downloadFile(String link, File dest) {
+
+        // создаём запрос на скачивание по ссылке
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(link));
+
+        // запрет скачивания через роуминг
+        request.setAllowedOverRoaming(false);
+
+        // выставляем название уведомления(имя файла)
+        request.setTitle(dest.getName());
+
+        // показываем уведомление на всех стадия скачивания
+        request.setNotificationVisibility(VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        // выставляем URI с путем, куда будет скачан файл
+        request.setDestinationUri(Uri.fromFile(dest));
+
+        // добавляем запрос в очередь и сохраняем последний ID
+        mCurrentDownloadId = mDownloadManager.enqueue(request);
     }
 }

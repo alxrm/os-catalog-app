@@ -59,7 +59,7 @@ public class Pages {
 
         try {
             /* запись объектов данных страницы в динамический массив */
-            result = sGson.fromJson(AssetsUtil.readJsonFromFile(name), type);
+            result = sGson.fromJson(FileUtils.readJsonFromFile(name), type);
         } catch (Throwable e) {
             /* обработка ошибки */
             e.printStackTrace();
