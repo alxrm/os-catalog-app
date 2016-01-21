@@ -3,42 +3,49 @@
     "ext":"pdf",
     "name":"А. В. Гордеев OC",
     "link":"http://vk.com/doc223878205_437165068?hash=551b8fc4364b42e035&dl=726325738ed8b6c1d9&api=1",
-    "size":2721500
+    "size":2721500,
+    "icon": "books.png"
   },
   {
     "ext":"pdf",
     "name":"В. Ф. Мелехин - Вычислительные машины, системы и сети",
     "link":"http://vk.com/doc223878205_437165069?hash=1dd7b67dcfffeb9112&dl=a4d5bd0cd2fa11cd4e&api=1",
-    "size":442403
+    "size":442403,
+    "icon": "books.png"
   },
   {
     "ext":"pdf",
     "name":"Андреев А.Г. - Microsoft Windows XP Home Edition & Professional. Русские версии (В подлиннике) - 2003",
     "link":"http://vk.com/doc223878205_437165070?hash=aa5ab9c8d53105658b&dl=b8c8b563746bb2694e&api=1",
-    "size":60088327
+    "size":60088327,
+    "icon": "books.png"
   },
   {
     "ext":"djvu",
     "name":"И.И. Попов, Т.Л. Партыка Операционные системы, среды и оболочки",
     "link":"http://vk.com/doc223878205_437165071?hash=1215d515067a6c8019&dl=409653e8b6d87bd88f&api=1",
-    "size":7532965
+    "size":7532965,
+    "icon": "books.png"
   },
   {
     "ext":"doc",
     "name":"КОС КСК ОС 2 курс",
     "link":"http://vk.com/doc223878205_437165072?hash=442a6d861bbf1f1ffb&dl=f78d164834999cddac&api=1",
-    "size":163328
+    "size":163328,
+    "icon": "books.png"
   },
   {
     "ext":"djvu",
     "name":"Сетевые операционные системы (Олифер)",
     "link":"http://vk.com/doc223878205_437165073?hash=c08c982e1dafe26eb6&dl=28fb06045115b41fb8&api=1",
-    "size":6223692
+    "size":6223692,
+    "icon": "books.png"
   },
   {
     "ext":"doc",
     "name":"УМК ПКС 2 курс ОС готовое",
     "link":"http://vk.com/doc223878205_437165074?hash=c35d60fe0b82ddec12&dl=7a2221350fc1f50192&api=1",
-    "size":986624
+    "size":986624,
+    "icon": "books.png"
   }
 ]

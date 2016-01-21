@@ -3,36 +3,42 @@
     "ext":"doc",
     "name":"1 Классификация процессов",
     "link":"http://vk.com/doc223878205_437165076?hash=d495e471deb4d0f20b&dl=c8b974bb0c94f52d7b&api=1",
-    "size":33280
+    "size":33280,
+    "icon": "labs1.png"
   },
   {
     "ext":"doc",
     "name":"2 Управление процессами в ОС",
     "link":"http://vk.com/doc223878205_437165077?hash=b9f16ef5e4ed9c918e&dl=f5d254841a08e3a5bf&api=1",
-    "size":99328
+    "size":99328,
+    "icon": "labs2.png"
   },
   {
     "ext":"doc",
     "name":"3 Работа с дисками",
     "link":"http://vk.com/doc223878205_437165078?hash=c42495815ff8bc5fc8&dl=c6d0ecdaf3535746c5&api=1",
-    "size":48640
+    "size":48640,
+    "icon": "labs3.png"
   },
   {
     "ext":"doc",
     "name":"4 Работа с текстовым редактором (Norton.Total.Windows Commander)",
     "link":"http://vk.com/doc223878205_437165079?hash=bfcc3ecebe74793d5f&dl=5a927dcf7d1fea11e3&api=1",
-    "size":27648
+    "size":27648,
+    "icon": "labs4.png"
   },
   {
     "ext":"docx",
     "name":"Android",
     "link":"http://vk.com/doc223878205_437165080?hash=ca46b769fd3e65472f&dl=084d32f576dda799d0&api=1",
-    "size":484655
+    "size":484655,
+    "icon": "labs5.png"
   },
   {
     "ext":"doc",
     "name":"Приложение Лабработа",
     "link":"http://vk.com/doc223878205_437165081?hash=183ff737e0d1d5f06c&dl=10a72da0ee5d4d658f&api=1",
-    "size":14745600
+    "size":14745600,
+    "icon": "labs6.png"
   }
 ]

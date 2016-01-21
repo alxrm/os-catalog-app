@@ -8,6 +8,7 @@ public class Document extends Content {
 
     private final String ext; // расширение
     private final long size; // размер файла в байтах
+    private String icon; // название файла иконки
 
     // конструктор, принимающий в себя специальный тип данных(посылка),
     // в который упаковываются данные из объекта
@@ -17,6 +18,7 @@ public class Document extends Content {
         // распаковывка данных из посылки и записываем их в поля расширения и размера
         this.ext = in.readString();
         this.size = in.readLong();
+        this.icon = in.readString();
     }
 
     // метод для получения имени файла
@@ -34,6 +36,11 @@ public class Document extends Content {
     // метод для получения расширения
     public String getExt() {
         return this.ext;
+    }
+
+    // метод получения названия иконки
+    public String getIcon() {
+        return icon;
     }
 
     // метод для получения размера файла
@@ -75,6 +82,7 @@ public class Document extends Content {
         super.writeToParcel(dest, flags); // запись унаследованных полей (имя, ссылка)
         dest.writeString(ext); // запись расширения
         dest.writeLong(size); // запись размера
+        dest.writeString(icon); // запись названия иконки
     }
 
     /* преобразует объект документа в строку, содержащую имя файла и расширение */

@@ -1,10 +1,12 @@
 package com.rm.oscatalog.ui.holder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rm.oscatalog.R;
 import com.rm.oscatalog.model.Document;
+import com.rm.oscatalog.utils.FileUtils;
 import com.rm.oscatalog.utils.FormatUtil;
 
 // класс, хранящий в себе внутренние представления для отрисовки документа
@@ -12,8 +14,8 @@ import com.rm.oscatalog.utils.FormatUtil;
 public class DocumentViewHolder extends BaseViewHolder {
 
     private TextView mName; // представление с именем
-    private TextView mExt; // расширение
     private TextView mSize; // размер
+    private ImageView mIcon; // иконка
 
     // конструктор, принимающий представление
     public DocumentViewHolder(View itemView) {
@@ -26,7 +28,7 @@ public class DocumentViewHolder extends BaseViewHolder {
 
         // получение представлений из вёрстки
         mName = (TextView) findViewById(R.id.item_name);
-        mExt = (TextView) findViewById(R.id.item_ext);
+        mIcon = (ImageView) findViewById(R.id.item_icon);
         mSize = (TextView) findViewById(R.id.item_info_extra);
     }
 
@@ -38,8 +40,9 @@ public class DocumentViewHolder extends BaseViewHolder {
         mName.setText(document.getName()); // привязка имени
         mSize.setText(FormatUtil.formatBytes(document.getSize())); // привязка размера
 
-        // делаем видимой строку с расширением(мы её прячем, если элемент это видео)
-        mExt.setVisibility(View.VISIBLE);
-        mExt.setText(document.getExt()); // привязка расширения
+        // загрузка иконки
+        mIcon.setImageBitmap(null);
+        mIcon.setVisibility(View.VISIBLE);
+        mIcon.setImageDrawable(FileUtils.loadImageFromFile(document.getIcon()));
     }
 }

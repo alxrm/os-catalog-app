@@ -206,7 +206,7 @@ public class PageContentFragment extends BaseFragment {
                     Document doc = (Document) item;
 
                     // создаём объект файла документа
-                    File documentFile = FileUtils.getFileForDocument(doc);
+                    File documentFile = FileUtils.makeFile(doc.toString());
 
                     // если файл документа уже скачан – просто открываем
                     // если не скачан, скачиваем

@@ -7,8 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
-import com.rm.oscatalog.model.Document;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -65,22 +63,33 @@ public final class FileUtils {
         return jsonStringBuilder.toString();
     }
 
+    /* метод получения MIME типа по URI */
     public static String getMimeType(Uri uri) {
         String mimeType;
 
+        // проверка формата URI, подходит ли он под схему внутренних URI системы
         if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+
+            // если он подходит, то системный инструмент для работы с данными вернёт нам MIME тип
             ContentResolver cr = sContext.getContentResolver();
             mimeType = cr.getType(uri);
         } else {
+
+            // если он не подходит (например URI схемы file – путь к файлу)
+
+            // мы получаем из специального утил класса расширение файла
             String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+
+            // получаем через ту же утилу сам MIME тип по расширению
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     fileExtension.toLowerCase()
             );
         }
-        return mimeType;
+        return mimeType; // возвращаем результат
     }
 
-    public static File getFileForDocument(Document item) {
-        return new File(sContext.getExternalCacheDir(), item.toString());
+    /* метод получения объекта файла по имени */
+    public static File makeFile(String fullName) {
+        return new File(sContext.getExternalCacheDir(), fullName);
     }
 }
