@@ -74,16 +74,16 @@ public class Pages {
         switch (key) {
             case LECTURES:
                 /* создание страницы с лекциями */
-                return new Page(R.drawable.lectures, TITLE_LECTURES, getPageData(key), TYPE_DOC);
+                return new Page(R.drawable.tab_lectures, TITLE_LECTURES, getPageData(key), TYPE_DOC);
             case LABS:
                 /* создание страницы с лабораторными */
-                return new Page(R.drawable.labs, TITLE_LABS, getPageData(key), TYPE_DOC);
+                return new Page(R.drawable.tab_labs, TITLE_LABS, getPageData(key), TYPE_DOC);
             case BOOKS:
                 /* создание страницы с полезными материалами */
-                return new Page(R.drawable.books, TITLE_BOOKS, getPageData(key), TYPE_DOC);
+                return new Page(R.drawable.tab_books, TITLE_BOOKS, getPageData(key), TYPE_DOC);
             case MOVIES:
                 /* создание страницы с видео */
-                return new Page(R.drawable.movies, TITLE_MOVIES, getPageData(key), TYPE_VIDEO);
+                return new Page(R.drawable.tab_movies, TITLE_MOVIES, getPageData(key), TYPE_VIDEO);
             default:
                 // вызывается ошибка в случае, мы не обрабатываем такую страницу
                 throw new IllegalArgumentException("Cannot make page from given key");

@@ -40,9 +40,8 @@ public class DocumentViewHolder extends BaseViewHolder {
         mName.setText(document.getName()); // привязка имени
         mSize.setText(FormatUtil.formatBytes(document.getSize())); // привязка размера
 
-        // загрузка иконки
-        mIcon.setImageBitmap(null);
-        mIcon.setVisibility(View.VISIBLE);
-        mIcon.setImageDrawable(FileUtils.loadImageFromFile(document.getIcon()));
+        mIcon.setImageBitmap(null); // очистка от того, что там могло быть(переиспользование ячеек)
+        mIcon.setVisibility(View.VISIBLE); // делаем видимой иконку, если она была невидимой
+        mIcon.setImageDrawable(FileUtils.loadImageFromFile(document.getIcon())); // загрузка иконки
     }
 }
